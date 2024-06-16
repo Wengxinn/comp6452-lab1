@@ -258,7 +258,7 @@ contract LunchVenue_updatedTest2 {
         resta2 = lv.addRestaurant('Uni Cafe');
 
         // Initialise friends variables
-        friend1 = lv.addFriend(lv.getManager(), 'aaaa');
+        friend1 = lv.addFriend(lv.manager(), 'aaaa');
         friend2 = lv.addFriend(acc0, 'bbbb');
         friend3 = lv.addFriend(acc1, 'cccc');
         friend4 = lv.addFriend(acc2, 'dddd');
@@ -348,7 +348,7 @@ contract LunchVenue_updatedTest2 {
         // Set timeout to now
         lv.setTimeoutDuration(0);
 
-        Assert.equal(lv.getVoteOpen(), false, 'Voting should be closed');
+        Assert.equal(lv.voteOpen(), false, 'Voting should be closed');
     }
 
     /// Try to add a restaurant after timeout reached. This should fail
@@ -410,7 +410,7 @@ contract LunchVenue_updatedTest2 {
         // Try to catch reason for failure using try-catch . When using
         // try-catch we need 'this' keyword to make function call external
         try lv.enableVoting() {
-            Assert.notEqual(lv.getVoteOpen(), true, 'Method execution did not fail');
+            Assert.notEqual(lv.voteOpen(), true, 'Method execution did not fail');
         } catch Error(string memory reason) {
             // Compare failure reason, check if it is as expected
             Assert.equal(reason, 'Only when contract is active', 'Failed with unexpected reason');

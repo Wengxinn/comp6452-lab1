@@ -118,32 +118,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "getManager",
-				"outputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getVoteOpen",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "isActive",
 				"outputs": [
 					{
@@ -418,11 +392,11 @@
 	},
 	"sources": {
 		"contracts/LunchVenue_updated.sol": {
-			"keccak256": "0x22a68bba148e68eb473c792ff7b46c5cc8300fb5153e6ed0939fba51e7f80fb1",
+			"keccak256": "0x3f43dd55185fe389905c78a95057e95dac3c197fb58ba51726f34dafb288b6d6",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://1d6f0db81a9866dcb3eb9a33b1e29c53197e7fac3582a3eb1f46f65b481c3e7d",
-				"dweb:/ipfs/QmTZjJFVQjnEh2NJgD4ekBmMpFBGUCA4qW3iSyhK6HnNvh"
+				"bzz-raw://0a75f4d270c240801d36515a016b047162676d395d99a0374f07544bf4459968",
+				"dweb:/ipfs/QmeZmxz6fddQ46rU6P4coqVAZaWDcznTDrgzcKig3bP3bg"
 			]
 		}
 	},

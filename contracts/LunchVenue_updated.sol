@@ -221,15 +221,6 @@ contract LunchVenue_updated {
     function disableContract() public restricted active {
         isActive = false;
     }
-
-
-    function getManager() public view returns (address) {
-        return manager;
-    }
-
-    function getVoteOpen() public view returns (bool) {
-        return voteOpen;
-    }
     
     /** 
      * @notice Only the manager can do
