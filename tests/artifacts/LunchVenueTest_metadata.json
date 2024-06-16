@@ -8,17 +8,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "timeoutDuration",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "address",
 						"name": "friendAddress",
 						"type": "address"
@@ -61,7 +50,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "disableContract",
+				"name": "beforeAll",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -82,13 +71,6 @@
 						"type": "bool"
 					}
 				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "enableVoting",
-				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -118,15 +100,9 @@
 			},
 			{
 				"inputs": [],
-				"name": "isActive",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
+				"name": "lunchVenueTest",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -140,6 +116,13 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "managerTest",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -201,29 +184,66 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "timeoutDuration",
-						"type": "uint256"
-					}
-				],
-				"name": "setTimeoutDuration",
+				"inputs": [],
+				"name": "setFriend",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
 				"inputs": [],
-				"name": "timeoutBlockNumber",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
+				"name": "setFriendFailure",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "setRestaurant",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "setRestaurantFailure",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "vote",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "vote2",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "vote3",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "voteAfterClosedFailure",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "voteFailure",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -237,6 +257,13 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "voteOpenTest",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -278,11 +305,10 @@
 			}
 		],
 		"devdoc": {
-			"author": "Weng Xinn Chow ",
 			"kind": "dev",
 			"methods": {
 				"addFriend(address,string)": {
-					"details": "The code checks duplication of friends,       it ensures friends can no longer be added once voting is open,      or when timeout is reached,       and it is restricted to manager only,      when contract is active",
+					"details": "To simplify the code duplication of friends is not checked",
 					"params": {
 						"friendAddress": "Friend's account/address",
 						"name": "Friend's name"
@@ -292,7 +318,7 @@
 					}
 				},
 				"addRestaurant(string)": {
-					"details": "The code checks duplication of restaurants,       it ensures restaurants can no longer be added once voting is open,       or when timeout is reached,       and it is restricted to manager only,      when contract is active",
+					"details": "To simplify the code, duplication of restaurants isn't checked",
 					"params": {
 						"name": "Restaurant name"
 					},
@@ -300,35 +326,16 @@
 						"_0": "Number of restaurants added so far"
 					}
 				},
-				"constructor": {
-					"details": "Set manager and lunchtimeBlock when contract starts",
-					"params": {
-						"timeoutDuration": "Duration of voting process"
-					}
-				},
-				"disableContract()": {
-					"details": "The code checks if contract is active,       and is restricted to manager only"
-				},
 				"doVote(uint256)": {
-					"details": "The code ensures voting can only be done when voting is open,       and when timeout is not reached,       and when quorum is not reached,       and if contract is active",
+					"details": "To simplify the code duplicate votes by a friend is not checked",
 					"params": {
 						"restaurant": "Restaurant number being voted"
 					},
 					"returns": {
-						"validVote": "Is the vote valid? A valid vote should be from a registered          friend to a registered restaurant"
-					}
-				},
-				"enableVoting()": {
-					"details": "The code checks if contract is active,       and is restricted to manager only"
-				},
-				"setTimeoutDuration(uint256)": {
-					"details": "The code checks if contract is active,       and is restricted to manager only",
-					"params": {
-						"timeoutDuration": "Duration of voting process"
+						"validVote": "Is the vote valid? A valid vote should be from a registered  friend to a registered restaurant"
 					}
 				}
 			},
-			"title": "Contract to agree on the lunch venue",
 			"version": 1
 		},
 		"userdoc": {
@@ -340,25 +347,56 @@
 				"addRestaurant(string)": {
 					"notice": "Add a new restaurant"
 				},
-				"disableContract()": {
-					"notice": "Disable contract"
+				"beforeAll()": {
+					"notice": "'beforeAll' runs before all other tests More special functions are: 'beforeEach', 'beforeAll', 'afterEach' & 'afterAll'"
 				},
 				"doVote(uint256)": {
 					"notice": "Vote for a restaurant"
 				},
-				"enableVoting()": {
-					"notice": "Enable voting"
+				"lunchVenueTest()": {
+					"notice": "Verify lunch venue is set correctly"
 				},
-				"setTimeoutDuration(uint256)": {
-					"notice": "Set duration of voting"
+				"managerTest()": {
+					"notice": "Check manager account-0 is the default account that deploy contract, so it should be the manager (i.e., acc0)"
+				},
+				"setFriend()": {
+					"notice": "Set friends as account-0 #sender doesn't need to be specified explicitly for account-0"
+				},
+				"setFriendFailure()": {
+					"notice": "Try adding friend as a user other than manager. This should fail"
+				},
+				"setRestaurant()": {
+					"notice": "Add restuarant as manager When msg.sender isn't specified, default account (i.e., account-0) is the sender"
+				},
+				"setRestaurantFailure()": {
+					"notice": "Try to add a restaurant as a user other than manager. This should fail #sender: account-1"
+				},
+				"vote()": {
+					"notice": "Vote as Bob (acc1) #sender: account-1"
+				},
+				"vote2()": {
+					"notice": "Vote as Charlie #sender: account-2"
+				},
+				"vote3()": {
+					"notice": "Vote as Eve #sender: account-3"
+				},
+				"voteAfterClosedFailure()": {
+					"notice": "Verify voting after vote closed. This should fail"
+				},
+				"voteFailure()": {
+					"notice": "Try voting as a user not in the friends list. This should fail #sender: account-4"
+				},
+				"voteOpenTest()": {
+					"notice": "Verify voting is now closed"
 				}
 			},
+			"notice": "Inherit 'LunchVenue' contract",
 			"version": 1
 		}
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/LunchVenue_updated.sol": "LunchVenue"
+			"tests/LunchVenue_updated_test.sol": "LunchVenueTest"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -372,12 +410,36 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/LunchVenue_updated.sol": {
-			"keccak256": "0x2b46c444638799d07316376ca64585cb19cbf85a6f8dda95d9ddebbea6f99ac3",
+		"contracts/LunchVenue.sol": {
+			"keccak256": "0x2a333063a2fb1d3f8bda9ceb5f05678277176d7733af1e4b935323dd4e50610d",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://984a11783fadd8253b930aebff8938416141b34a43f5b735ac070bb62132d544",
-				"dweb:/ipfs/QmTSZvbes2Gsot8ZJCfwUmVcbq41K5owDDVsT7jo2g7wnq"
+				"bzz-raw://6d57864b401e81dd60ffe2daecf354affa05c0873e6dff3054459b5361d2e202",
+				"dweb:/ipfs/QmNbNtsEocdqpT5c9Pfs2MU6GtCQFchP5U4NLxBKjuC6Mq"
+			]
+		},
+		"remix_accounts.sol": {
+			"keccak256": "0xab088ffd1cd1033f54c2486f151b5d02281a3b76724c8e6f48479c25a4f7809e",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://5ddaf9976b1838f7028cbedfaf7f6e1cf8c898e100221176ff1406ee8b599f23",
+				"dweb:/ipfs/QmX2FYLXYyo5Cn55ZX2CfngpscSh4mQhcMVzQdQsh2vqcG"
+			]
+		},
+		"remix_tests.sol": {
+			"keccak256": "0xe2783cdc204cba8c72494119339f1d90f9022b15d6c718c668b7f097d8e29787",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://bb6a22e64c7f16bcaab63b1c1a1b269d5be8a6d37bdd9dec1718477ab916b18e",
+				"dweb:/ipfs/QmdkW1tT5iadBvaHMCoskhDGZKnfdg8o1D9CcoQYtdJet7"
+			]
+		},
+		"tests/LunchVenue_updated_test.sol": {
+			"keccak256": "0x35921ce08c11fadf9dba77757b9b1fdf1577ff00cd33d55766b5f82827cc375a",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://aaf0069b2659588b14952ac7d5044587e48c660cf500dc3ab9737e7461d2e0c4",
+				"dweb:/ipfs/QmNvpnPXMbyCLJxseNLhA6zGMx6RoSLJ33WbYpqsvboe3Q"
 			]
 		}
 	},

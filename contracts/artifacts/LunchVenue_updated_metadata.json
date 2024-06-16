@@ -118,6 +118,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "getManager",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "isActive",
 				"outputs": [
 					{
@@ -195,6 +208,19 @@
 						"internalType": "string",
 						"name": "",
 						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "sender",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -358,7 +384,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/LunchVenue_updated.sol": "LunchVenue"
+			"contracts/LunchVenue_updated.sol": "LunchVenue_updated"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -373,11 +399,11 @@
 	},
 	"sources": {
 		"contracts/LunchVenue_updated.sol": {
-			"keccak256": "0x2b46c444638799d07316376ca64585cb19cbf85a6f8dda95d9ddebbea6f99ac3",
+			"keccak256": "0x2cad59f0919b0975d33aefeb8a573c5f537de0ea62a13de4010a3b779a647733",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://984a11783fadd8253b930aebff8938416141b34a43f5b735ac070bb62132d544",
-				"dweb:/ipfs/QmTSZvbes2Gsot8ZJCfwUmVcbq41K5owDDVsT7jo2g7wnq"
+				"bzz-raw://90c071d1971226e7afe86c70d63e479a3e5248c07200327ada695e10c0cde5fa",
+				"dweb:/ipfs/QmW8hU6KpspPF1C9y5FpgYfEq1EZpMatY1xDhSX8aPVRT7"
 			]
 		}
 	},
