@@ -131,6 +131,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "getVoteOpen",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "isActive",
 				"outputs": [
 					{
@@ -235,7 +248,13 @@
 					}
 				],
 				"name": "setTimeoutDuration",
-				"outputs": [],
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "status",
+						"type": "bool"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -399,11 +418,11 @@
 	},
 	"sources": {
 		"contracts/LunchVenue_updated.sol": {
-			"keccak256": "0x2cad59f0919b0975d33aefeb8a573c5f537de0ea62a13de4010a3b779a647733",
+			"keccak256": "0x22a68bba148e68eb473c792ff7b46c5cc8300fb5153e6ed0939fba51e7f80fb1",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://90c071d1971226e7afe86c70d63e479a3e5248c07200327ada695e10c0cde5fa",
-				"dweb:/ipfs/QmW8hU6KpspPF1C9y5FpgYfEq1EZpMatY1xDhSX8aPVRT7"
+				"bzz-raw://1d6f0db81a9866dcb3eb9a33b1e29c53197e7fac3582a3eb1f46f65b481c3e7d",
+				"dweb:/ipfs/QmTZjJFVQjnEh2NJgD4ekBmMpFBGUCA4qW3iSyhK6HnNvh"
 			]
 		}
 	},

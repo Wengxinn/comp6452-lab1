@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 /// @title Contract to agree on the lunch venue
 /// @author Weng Xinn Chow 
 
-contract LunchVenue {
+contract LunchVenue_updated {
     
     struct Friend {
         string name;
@@ -35,8 +35,9 @@ contract LunchVenue {
 
     uint public timeoutBlockNumber;                //Block number when voting should be closed
     bool public isActive = true;                   //Contract status
+    address public sender;                         //Message sender
 
-    uint constant DEFAULTTIMEOUTDURATION = 10;     //Default timeout duration
+    uint constant DEFAULTTIMEOUTDURATION = 100;    //Default timeout duration
 
     /**
      * @dev Set manager and lunchtimeBlock when contract starts
@@ -117,16 +118,16 @@ contract LunchVenue {
         validVote = false;    //Is the vote valid?
 
         //Check preconditions to vote:
+        //Timeout is not reached
+        if (block.number >= timeoutBlockNumber) {
+            _finalResult();
+        }
         //Friend (who votes) exists 
         require(bytes(friends[msg.sender].name).length != 0, "Friend does not exist");
         //Restaurant voted exists
         require(bytes(restaurants[restaurant]).length != 0, "Restaurant voted does not exist");
         //Friend (who votes) has not already voted
         require(!friends[msg.sender].voted, "Friend has voted already");
-        //Timeout is not reached
-        if (block.number >= timeoutBlockNumber) {
-            _finalResult();
-        }
 
         // Add vote to votes list
         validVote = true;
@@ -181,8 +182,16 @@ contract LunchVenue {
      *
      * @param timeoutDuration Duration of voting process
     */
-    function setTimeoutDuration(uint timeoutDuration) public restricted active {
+    function setTimeoutDuration(uint timeoutDuration) public restricted active returns (bool status) {
+        status = false;   // Change status
         timeoutBlockNumber = block.number + timeoutDuration;
+
+        if (block.number <= timeoutBlockNumber) {
+            voteOpen = false;
+        }
+
+        status = true;
+        return status;
     }
 
     /** 
@@ -211,6 +220,15 @@ contract LunchVenue {
     */
     function disableContract() public restricted active {
         isActive = false;
+    }
+
+
+    function getManager() public view returns (address) {
+        return manager;
+    }
+
+    function getVoteOpen() public view returns (bool) {
+        return voteOpen;
     }
     
     /** 

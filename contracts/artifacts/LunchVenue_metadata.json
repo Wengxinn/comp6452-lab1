@@ -6,13 +6,7 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "timeoutDuration",
-						"type": "uint256"
-					}
-				],
+				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
@@ -60,13 +54,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [],
-				"name": "disableContract",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -82,13 +69,6 @@
 						"type": "bool"
 					}
 				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "enableVoting",
-				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -110,19 +90,6 @@
 					{
 						"internalType": "bool",
 						"name": "voted",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "isActive",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
 						"type": "bool"
 					}
 				],
@@ -201,32 +168,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "timeoutDuration",
-						"type": "uint256"
-					}
-				],
-				"name": "setTimeoutDuration",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "timeoutBlockNumber",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
 				"inputs": [],
 				"name": "voteOpen",
 				"outputs": [
@@ -278,11 +219,11 @@
 			}
 		],
 		"devdoc": {
-			"author": "Weng Xinn Chow ",
+			"author": "Dilum Bandara, CSIRO's Data61",
 			"kind": "dev",
 			"methods": {
 				"addFriend(address,string)": {
-					"details": "The code checks duplication of friends,       it ensures friends can no longer be added once voting is open,      or when timeout is reached,       and it is restricted to manager only,      when contract is active",
+					"details": "To simplify the code duplication of friends is not checked",
 					"params": {
 						"friendAddress": "Friend's account/address",
 						"name": "Friend's name"
@@ -292,7 +233,7 @@
 					}
 				},
 				"addRestaurant(string)": {
-					"details": "The code checks duplication of restaurants,       it ensures restaurants can no longer be added once voting is open,       or when timeout is reached,       and it is restricted to manager only,      when contract is active",
+					"details": "To simplify the code, duplication of restaurants isn't checked",
 					"params": {
 						"name": "Restaurant name"
 					},
@@ -301,30 +242,15 @@
 					}
 				},
 				"constructor": {
-					"details": "Set manager and lunchtimeBlock when contract starts",
-					"params": {
-						"timeoutDuration": "Duration of voting process"
-					}
-				},
-				"disableContract()": {
-					"details": "The code checks if contract is active,       and is restricted to manager only"
+					"details": "Set manager when contract starts"
 				},
 				"doVote(uint256)": {
-					"details": "The code ensures voting can only be done when voting is open,       and when timeout is not reached,       and when quorum is not reached,       and if contract is active",
+					"details": "To simplify the code duplicate votes by a friend is not checked",
 					"params": {
 						"restaurant": "Restaurant number being voted"
 					},
 					"returns": {
-						"validVote": "Is the vote valid? A valid vote should be from a registered          friend to a registered restaurant"
-					}
-				},
-				"enableVoting()": {
-					"details": "The code checks if contract is active,       and is restricted to manager only"
-				},
-				"setTimeoutDuration(uint256)": {
-					"details": "The code checks if contract is active,       and is restricted to manager only",
-					"params": {
-						"timeoutDuration": "Duration of voting process"
+						"validVote": "Is the vote valid? A valid vote should be from a registered  friend to a registered restaurant"
 					}
 				}
 			},
@@ -340,17 +266,8 @@
 				"addRestaurant(string)": {
 					"notice": "Add a new restaurant"
 				},
-				"disableContract()": {
-					"notice": "Disable contract"
-				},
 				"doVote(uint256)": {
 					"notice": "Vote for a restaurant"
-				},
-				"enableVoting()": {
-					"notice": "Enable voting"
-				},
-				"setTimeoutDuration(uint256)": {
-					"notice": "Set duration of voting"
 				}
 			},
 			"version": 1
@@ -358,7 +275,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/LunchVenue_updated.sol": "LunchVenue"
+			"contracts/LunchVenue.sol": "LunchVenue"
 		},
 		"evmVersion": "cancun",
 		"libraries": {},
@@ -372,12 +289,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/LunchVenue_updated.sol": {
-			"keccak256": "0x2b46c444638799d07316376ca64585cb19cbf85a6f8dda95d9ddebbea6f99ac3",
+		"contracts/LunchVenue.sol": {
+			"keccak256": "0x2a333063a2fb1d3f8bda9ceb5f05678277176d7733af1e4b935323dd4e50610d",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://984a11783fadd8253b930aebff8938416141b34a43f5b735ac070bb62132d544",
-				"dweb:/ipfs/QmTSZvbes2Gsot8ZJCfwUmVcbq41K5owDDVsT7jo2g7wnq"
+				"bzz-raw://6d57864b401e81dd60ffe2daecf354affa05c0873e6dff3054459b5361d2e202",
+				"dweb:/ipfs/QmNbNtsEocdqpT5c9Pfs2MU6GtCQFchP5U4NLxBKjuC6Mq"
 			]
 		}
 	},

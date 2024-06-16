@@ -12,7 +12,7 @@ import "remix_accounts.sol";
 import "../contracts/LunchVenue_updated.sol";
 
 // File name has to end with '_test.sol', this file can contain more than one testSuite contracts
-/// Inherit 'LunchVenue' contract
+/// Inherit 'LunchVenue_updated' contract
 contract LunchVenue_updatedTest is LunchVenue_updated(100) {
     
     // Variables used to emulate different accounts  
@@ -39,9 +39,32 @@ contract LunchVenue_updatedTest is LunchVenue_updated(100) {
         Assert.equal(manager, acc0, 'Manager should be acc0');
     }
 
-    /// Check timeoutBlockNumber
+    /// Check timeout block number
     function testTimeoutBlockNumber() public {
         Assert.greaterThan(timeoutBlockNumber, block.number, 'Timeout block number should be set');
+    }
+
+    /// Set timeout duration block as manager
+    /// When msg.sender isn't specified, default account (i.e., account-0) is the sender
+    function testsetTimeoutDuration() public {
+        Assert.equal(setTimeoutDuration(100), true, 'Should be equal to true');
+    }
+
+    /// Try to set timeout duration as a user other than manager. This should fail
+    /// this represents contract address which is not manager's address
+    function testSetTimeoutDurationFailure() public {
+        // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try this.setTimeoutDuration(100) returns (bool status) {
+            Assert.notEqual(status, true, 'Method execution did not fail');
+        } catch Error(string memory reason) {
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Can only be executed by the manager', 'Failed with unexpected reason');
+        } catch Panic(uint /* errorCode */) { // In case of a panic
+            Assert.ok(false, 'Failed unexpected with error code');
+        } catch (bytes memory /*lowLevelData*/) {
+            Assert.ok(false, 'Failed unexpected');
+        }
     }
     
     /// Add restaurants as manager
@@ -94,7 +117,7 @@ contract LunchVenue_updatedTest is LunchVenue_updated(100) {
     /// Try to enable voting as a user other than manager. This should fail
     function testEnableVotingFailure() public {
         try this.enableVoting() {
-            Assert.equal(voteOpen, false, 'Method execution did not fail');
+            Assert.notEqual(voteOpen, false, 'Method execution did not fail');
         } catch Error(string memory reason) {
             // Compare failure reason, check if it is as expected
             Assert.equal(reason, 'Can only be executed by the manager', 'Failed with unexpected reason');
@@ -120,9 +143,9 @@ contract LunchVenue_updatedTest is LunchVenue_updated(100) {
     }
 
     /// Try voting as a user not in the friends list. This should fail
-    function testDoVoteFailure() public {
+    function testDoVoteAsUnexistedFriendFailure() public {
         try this.doVote(1) returns (bool validVote) {
-            Assert.equal(validVote, true, 'Method execution did not fail');
+            Assert.notEqual(validVote, true, 'Method execution did not fail');
         } catch Error(string memory reason) {
             // Compare failure reason, check if it is as expected
             Assert.equal(reason, 'Friend does not exist', 'Failed with unexpected reason');
@@ -145,20 +168,20 @@ contract LunchVenue_updatedTest is LunchVenue_updated(100) {
         Assert.ok(doVote(2), 'Voting result should be true');
     }
 
-    /// Verify lunch venue is set correctly
+    /// Verify lunch venue is set correctly after quorum met
     function testVotedRestaurant() public {
         Assert.equal(votedRestaurant, 'Uni Cafe', 'Selected restaurant should be Uni Cafe');
     }
     
-    /// Verify voting is now closed
-    function testVoteOpen() public {
+    /// Verify voting is closed after quorum met
+    function testVoteOpenAfterVotingClosed() public {
         Assert.equal(voteOpen, false, 'Voting should be closed');
     }
     
     /// Verify voting after vote closed. This should fail
     function testDoVoteAfterVotingClosedFailure() public {
         try this.doVote(1) returns (bool validVote) {
-            Assert.equal(validVote, true, 'Method execution did not fail');
+            Assert.notEqual(validVote, true, 'Method execution did not fail');
         } catch Error(string memory reason) {
             // Compare failure reason, check if it is as expected
             Assert.equal(reason, 'Can vote only while voting is open', 'Failed with unexpected reason');
@@ -191,5 +214,206 @@ contract LunchVenue_updatedTest is LunchVenue_updated(100) {
         Assert.equal(isActive, true, 'Should be equal to 1');
         disableContract();
         Assert.equal(isActive, false, 'Should be equal to 1');
+    }
+}
+
+// File name has to end with '_test.sol', this file can contain more than one testSuite contracts
+/// Inherit 'LunchVenue_updated' contract
+// This contract acts as the manager
+contract LunchVenue_updatedTest2 {
+
+    LunchVenue_updated lv;
+    
+    // Variables used to emulate different accounts  
+    address acc0;   
+    address acc1;
+    address acc2;
+    address acc3;
+    address acc4;
+
+    // Variables used emulate different restaurants
+    uint resta1;
+    uint resta2;
+
+    // Variables used emulate different friends
+    uint friend1;
+    uint friend2;
+    uint friend3;
+    uint friend4;
+
+    /// 'beforeAll' runs before all other tests
+    /// More special functions are: 'beforeEach', 'beforeAll', 'afterEach' & 'afterAll'
+    function beforeAll() public {
+        // Initialise instance for testing
+        lv = new LunchVenue_updated(100);
+
+        // Initiate account variables
+        acc0 = TestsAccounts.getAccount(0);
+        acc1 = TestsAccounts.getAccount(1);
+        acc2 = TestsAccounts.getAccount(2);
+        acc3 = TestsAccounts.getAccount(3);
+
+        // Initialise restaurant variables
+        resta1 = lv.addRestaurant('Courtyard Cafe');
+        resta2 = lv.addRestaurant('Uni Cafe');
+
+        // Initialise friends variables
+        friend1 = lv.addFriend(lv.getManager(), 'aaaa');
+        friend2 = lv.addFriend(acc0, 'bbbb');
+        friend3 = lv.addFriend(acc1, 'cccc');
+        friend4 = lv.addFriend(acc2, 'dddd');
+    }
+
+    /// Try to add an existed restaurant. This should fail
+    function testAddExistedRestaurantFailure() public {
+        // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try lv.addRestaurant('Courtyard Cafe') returns (uint v) {
+            Assert.notEqual(v, 3, 'Method execution did not fail');
+        } catch Error(string memory reason) {
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Restaurant already exists', 'Failed with unexpected reason');
+        }
+    }
+
+    /// Try to add an existed friend. This should fail
+    function testAddExistedFriendFailure() public {
+        // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try lv.addFriend(acc0, 'aaaa') returns (uint f) {
+            Assert.notEqual(f, 5, 'Method execution did not fail');
+        } catch Error(string memory reason) { // In case revert() called
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Friend already exists', 'Failed with unexpected reason');
+        }
+    }
+
+    /// Try to add a restaurant after voting open. This should fail
+    function testAddRestaurantAfterVotingOpenFailure() public {
+        // Enable voting
+        lv.enableVoting();
+
+        // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try lv.addRestaurant('Plume Cafe') returns (uint v) {
+            Assert.notEqual(v, 3, 'Method execution did not fail');
+        } catch Error(string memory reason) {
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Can add friends or restaurants only when voting is disabled', 'Failed with unexpected reason');
+        }
+    }
+    
+
+    /// Try adding a friend after voting open. This should fail
+    function testAddFriendAfterVotingOpenFailure() public {
+        // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try lv.addFriend(acc3, 'eeee') returns (uint f) {
+            Assert.notEqual(f, 5, 'Method execution did not fail');
+        } catch Error(string memory reason) { // In case revert() called
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Can add friends or restaurants only when voting is disabled', 'Failed with unexpected reason');
+        }
+    }
+
+    /// Try voting a restaurant not in the restaurants list. This should fail
+    function testDoVoteUnexistedRestaurantFailure() public {
+        // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try lv.doVote(3) returns (bool validVote) {
+            Assert.notEqual(validVote, true, 'Method execution did not fail');
+        } catch Error(string memory reason) {
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Restaurant voted does not exist', 'Failed with unexpected reason');
+        }
+    }
+
+    /// Try voting after voted. This should fail
+    function testDoVoteAfterVotedFailure() public {
+        // Do valid vote
+        lv.doVote(1);
+
+    // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try lv.doVote(1) returns (bool validVote) {
+            Assert.notEqual(validVote, true, 'Method execution did not fail');
+        } catch Error(string memory reason) {
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Friend has voted already', 'Failed with unexpected reason');
+        }
+    }
+
+    /// Verify voting is closed after timeout reached
+    function testVoteOpenAfterTimeoutReached() public {
+        // Set timeout to now
+        lv.setTimeoutDuration(0);
+
+        Assert.equal(lv.getVoteOpen(), false, 'Voting should be closed');
+    }
+
+    /// Try to add a restaurant after timeout reached. This should fail
+    function testAddRestaurantAfterTimeoutReached() public {
+        // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try lv.addRestaurant('Plume Cafe') returns (uint v) {
+            Assert.notEqual(v, 3, 'Method execution did not fail');
+        } catch Error(string memory reason) {
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Timeout reached', 'Failed with unexpected reason');
+        }
+    }
+
+    /// Try adding a friend after timeout reached. This should fail
+    function testAddFriendAfterTimeoutReached() public {
+        // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try lv.addFriend(acc3, 'eeee') returns (uint f) {
+            Assert.notEqual(f, 5, 'Method execution did not fail');
+        } catch Error(string memory reason) {
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Timeout reached', 'Failed with unexpected reason');
+        }
+    }
+
+    /// Try to add a restaurant after contract disabled. This should fail
+    function testAddRestaurantAfterContractDisable() public {
+        // Set timeout
+        lv.setTimeoutDuration(100);
+
+        // Disable contract
+        lv.disableContract();
+
+        // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try lv.addRestaurant('Plume Cafe') returns (uint v) {
+            Assert.notEqual(v, 3, 'Method execution did not fail');
+        } catch Error(string memory reason) {
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Only when contract is active', 'Failed with unexpected reason');
+        }
+    }
+
+    /// Try adding a friend after contract disabled. This should fail
+    function testAddFriendAfterContractDisable() public {
+        // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try lv.addFriend(acc3, 'eeee') returns (uint f) {
+            Assert.notEqual(f, 5, 'Method execution did not fail');
+        } catch Error(string memory reason) {
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Only when contract is active', 'Failed with unexpected reason');
+        }
+    }
+
+    /// Try to enable voting after contract disabled. This should fail
+    function testEnableVotingAfterContractDisable() public {
+        // Try to catch reason for failure using try-catch . When using
+        // try-catch we need 'this' keyword to make function call external
+        try lv.enableVoting() {
+            Assert.notEqual(lv.getVoteOpen(), true, 'Method execution did not fail');
+        } catch Error(string memory reason) {
+            // Compare failure reason, check if it is as expected
+            Assert.equal(reason, 'Only when contract is active', 'Failed with unexpected reason');
+        }
     }
 }
